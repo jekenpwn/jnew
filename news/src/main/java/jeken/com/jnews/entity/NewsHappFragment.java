@@ -14,10 +14,11 @@ import jeken.com.jnews.R;
 import jeken.com.jnews.adapter.NewsItemAdapter;
 import jeken.com.jnews.base.BaseFragment;
 import jeken.com.jnews.data.ActPostData;
+import jeken.com.jnews.data.News;
 import jeken.com.jnews.data.NewsItem;
-import jeken.com.jnews.net.Config;
-import jeken.com.jnews.net.HttpHandle;
-import jeken.com.jnews.tools.NewsAPIHelper;
+import jeken.com.jnews.data.NewsTool;
+import jeken.com.jnews.net.ClickedAdd;
+import jeken.com.jnews.net.JnewsHandle;
 import jeken.com.jnews.view.AutoListView;
 
 
@@ -27,16 +28,17 @@ import jeken.com.jnews.view.AutoListView;
 
 public class NewsHappFragment extends BaseFragment implements AdapterView.OnItemClickListener {
     private final int UPDATA_LIST = 1;
-    private final String url = "http://route.showapi.com/109-35";
-    private final String channeId = "5572a108b3cdc86cf39001d5";
-    private final String name = "娱乐焦点";
-    private Config mConfig;
+//    private final String url = "http://route.showapi.com/109-35";
+//    private final String channeId = "5572a108b3cdc86cf39001d5";
+//    private final String name = "娱乐焦点";
+//    private Config mConfig;
 
     private List<NewsItem> data;
     private List<ActPostData> postDatas;
     private NewsItemAdapter adapter;
-    private HttpHandle httpHandle;
+//    private HttpHandle httpHandle;
 
+    private JnewsHandle jnewsHandle;
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -84,26 +86,44 @@ public class NewsHappFragment extends BaseFragment implements AdapterView.OnItem
     }
 
     private void netTask(){
-        mConfig =  new Config(channeId,name);
-        httpHandle = new HttpHandle(mContext,url, NewsAPIHelper.getAppid(),
-                NewsAPIHelper.getSecret(),mConfig,data);
-        httpHandle.buildReuest();
+//        mConfig =  new Config(channeId,name);
+//        httpHandle = new HttpHandle(mContext,url, NewsAPIHelper.getAppid(),
+//                NewsAPIHelper.getSecret(),mConfig,data);
+//        httpHandle.buildReuest();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                if (httpHandle.fistResust())
+//                //提醒更新,先延时1s后再更新
+//                mHandler.sendEmptyMessageDelayed(UPDATA_LIST,1000);
+//            }
+//        }).start();
+        jnewsHandle = new JnewsHandle(getContext(),"clickedcount",data);
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (httpHandle.fistResust())
-                //提醒更新,先延时1s后再更新
-                mHandler.sendEmptyMessageDelayed(UPDATA_LIST,1000);
+                //if (httpHandle.fistResust())
+                if (jnewsHandle.fistResust(30))
+                    //提醒更新,先延时1s后再更新
+                    mHandler.sendEmptyMessageDelayed(UPDATA_LIST,1000);
             }
         }).start();
     }
     public void netUpdateTask(){
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                if (httpHandle.updateRequest("4"))//加载多4条
+//                //提醒更新,先延时600ms后再更新
+//                mHandler.sendEmptyMessageDelayed(UPDATA_LIST,600);
+//            }
+//        }).start();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (httpHandle.updateRequest("4"))//加载多4条
-                //提醒更新,先延时600ms后再更新
-                mHandler.sendEmptyMessageDelayed(UPDATA_LIST,600);
+                if (jnewsHandle.updateRequest(4))
+                    //提醒更新,先延时600ms后再更新
+                    mHandler.sendEmptyMessageDelayed(UPDATA_LIST,600);
             }
         }).start();
     }
@@ -114,7 +134,11 @@ public class NewsHappFragment extends BaseFragment implements AdapterView.OnItem
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        News news = NewsTool.NewsItem_To_News(data.get(position-1));
+        if (news!=null){
+            //ClickedAdd.getInstance().init();
+            ClickedAdd.getInstance().add(news);
+        }
         String artile_url = data.get(position-1).artile_url;
         if (postDatas==null){
             postDatas = new ArrayList<ActPostData>();

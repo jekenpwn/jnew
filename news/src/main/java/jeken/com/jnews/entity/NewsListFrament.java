@@ -63,6 +63,7 @@ public class NewsListFrament extends BaseListFragment implements AdapterView.OnI
     }
     public void onListItemClick(ListView parent, View v,
                                 int position, long id) {
+
         if (mCallback != null){
             mCallback.showNewWeb(data.get(position).artile_url);
         }

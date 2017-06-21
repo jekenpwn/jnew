@@ -1,7 +1,6 @@
 package jeken.com.jnews.net;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -63,7 +62,7 @@ public class JnewsHandle implements NewsJsonInterface {
                 JSONObject jobj = JSON.parseObject(result);
                 lastindex = jobj.getInteger("lastindex");
                 JSONArray jarry = jobj.getJSONArray("lsnews");
-                Log.e(TAG,lastindex+"");
+                //Log.e(TAG,lastindex+"");
                 for (int i = 0;i<jarry.size();i++) {
                     JSONObject jitem_obj = jarry.getJSONObject(i);
                     NewsItem item = new NewsItem();
@@ -75,7 +74,7 @@ public class JnewsHandle implements NewsJsonInterface {
                         for (int j = 0;j < array.size();j++){
                             item.jpg.add(array.getString(j));
                             netBitmapGet.bindBitmap((String) array.get(j),item);
-                            Log.d(TAG,(String) array.get(j));
+                            //Log.d(TAG,(String) array.get(j));
                         }
                     if (isUpdate){
                         if (!data.contains(item))//有了没必要加载

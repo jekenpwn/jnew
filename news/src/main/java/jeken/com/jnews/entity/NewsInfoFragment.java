@@ -15,7 +15,10 @@ import jeken.com.jnews.R;
 import jeken.com.jnews.adapter.NewsItemAdapter;
 import jeken.com.jnews.base.BaseFragment;
 import jeken.com.jnews.data.ActPostData;
+import jeken.com.jnews.data.News;
 import jeken.com.jnews.data.NewsItem;
+import jeken.com.jnews.data.NewsTool;
+import jeken.com.jnews.net.ClickedAdd;
 import jeken.com.jnews.net.JnewsHandle;
 import jeken.com.jnews.view.AutoListView;
 
@@ -116,6 +119,12 @@ public class NewsInfoFragment extends BaseFragment implements AdapterView.OnItem
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        News news = NewsTool.NewsItem_To_News(data.get(position-1));
+        if (news!=null){
+            //ClickedAdd.getInstance().init();
+            ClickedAdd.getInstance().add(news);
+        }
 
         String artile_url = data.get(position-1).artile_url;
         if (postDatas==null){

@@ -15,4 +15,5 @@ public class NewsTool {
         news.setJpg(item.jpg);
         return news;
     }
+
 }

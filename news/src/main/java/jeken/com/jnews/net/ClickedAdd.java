@@ -18,7 +18,7 @@ import jeken.com.jnews.data.News;
 
 public class ClickedAdd {
     private String TAG = getClass().getSimpleName();
-    private static final String url = "http://172.16.116.20:8585/NewsPj/clickedcount";
+    private static final String url = "http://jekenpwn.cn:8989/NewsPj/clickedcount";
     private static ClickedAdd clickedAdd = null;
     private ClickedAdd(){}
     public static ClickedAdd getInstance(){
